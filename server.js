@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 
 app.get('/api/stations', (req, res) => {
     Station.findAll()
-        .then(data => res.json(data))
+        .then(data => res.status(200).json(data))
 })
 
 app.listen(port, () => {
