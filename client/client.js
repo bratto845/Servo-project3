@@ -1,5 +1,3 @@
-console.log('let us go on lunch');
-
 let map;
 
 async function initMap() {
