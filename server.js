@@ -10,6 +10,8 @@ const db = require('./db')
 const Station = require('./models/stations.js')
 const requestLogger = require('./middlewares/request_logger')
 
+app.set('view engine', 'ejs')
+
 app.use(express.json())
 
 app.use(express.static('client'))
@@ -22,6 +24,11 @@ app.get('/', (req, res) => {
 
 app.get('/api/stations', (req, res) => {
     Station.findAll()
+        .then(data => res.status(200).json(data))
+})
+
+app.get('/api/:column', (req, res) => {
+    Station.findAllByColumn(req.params.column)
         .then(data => res.status(200).json(data))
 })
 

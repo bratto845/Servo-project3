@@ -11,7 +11,19 @@ const Station = {
 
         return db.query(sql)
             .then(result => result.rows)
+    },
+
+    findAllByColumn: function(column) {
+        const sql = `
+            SELECT ${column} 
+            FROM petrol_stations
+            LIMIT 400;
+        `
+
+        return db.query(sql)
+            .then(result => result.rows)
     }
+
 }
 
 module.exports = Station
