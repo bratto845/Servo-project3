@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        * {
+            border: 1px solid black;
+        }
+
+        .wrapper {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+        }
+
+        .left-aside *, .right-aside * {
+            width: 50px; 
+            height: 50px;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <aside class="left-aside">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </aside>
+
+        <div class="map"> 
+
+        </div>
+
+
+        <aside class="right-aside">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </aside>
+    </div>
+
+
+</body>
+</html>
