@@ -44,6 +44,6 @@ COPY petrol_stations
         COMMENT,
         LATITUDE,
         LONGITUDE)
-        -- FROM **** 'insert path to CSV here' *******
+        FROM '/Users/bratto/seb/servo-project3/db/stations.csv'
         DELIMITER ','
         CSV HEADER;
