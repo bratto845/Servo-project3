@@ -9,7 +9,7 @@ tmp
 temp
 venv
 __pycache__
-
+.env
 
 
 
