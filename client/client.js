@@ -34,12 +34,16 @@ let map;
 
 async function initMap() {
     const { Map } = await google.maps.importLibrary("maps");
+   
+
     console.log(Map);
 
     map = new Map(document.getElementById("map"), {
     center: { lat: -34.397, lng: 150.644 },
     zoom: 8,
+    mapId: "servoSpaMapId",
     });
+    
 
     let center = map.getCenter()
     centerCoords_div.textContent = center
@@ -50,6 +54,26 @@ async function initMap() {
 
         console.log('New center:', newCenter.toJSON());
     });
+}
+
+async function createMarkers() {
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+
+
+    let res = await fetch('/api/stations/all')
+
+    let test = await res.json()
+
+    for (station of test) {
+        const marker = new AdvancedMarkerElement({
+        map,
+        position: { lat: Number(station.latitude), lng: Number(station.longitude)},
+    });
+    }
+
+
+
 }
 
 initMap();
