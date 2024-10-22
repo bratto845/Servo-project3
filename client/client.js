@@ -1,6 +1,14 @@
 const centerCoords_div = document.getElementById('center-coords')
 const servoListElem = document.querySelector('.servo-list')
 
+const clockDiv = document.getElementById('clock')
+
+
+const date = new Date()
+let tet = date.toLocaleString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+clockDiv.textContent = tet
+
+
 fetch('/api/stations')
     .then(result => result.json())
     .then(stations => {
@@ -29,7 +37,6 @@ const createStation = station => {
 }
 
 
-
 let map;
 
 async function initMap() {
@@ -47,7 +54,7 @@ async function initMap() {
         maxZoom: zoom,
         mapId: "servoSpaMapId",
     });
-    
+
     let center = map.getCenter()
     centerCoords_div.textContent = center
 
@@ -61,10 +68,9 @@ async function initMap() {
     createMarkers()
 }
 
+
 async function createMarkers() {
     const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-
-
 
     let res = await fetch('/api/stations/all')
 
@@ -101,27 +107,6 @@ async function createMarkers() {
             });
         });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
-
-
-
 }
-
 initMap();
