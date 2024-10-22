@@ -54,6 +54,8 @@ async function initMap() {
 
         console.log('New center:', newCenter.toJSON());
     });
+
+    createMarkers()
 }
 
 async function createMarkers() {
@@ -67,9 +69,43 @@ async function createMarkers() {
 
     for (station of test) {
         const marker = new AdvancedMarkerElement({
-        map,
-        position: { lat: Number(station.latitude), lng: Number(station.longitude)},
-    });
+            map,
+            position: { lat: Number(station.latitude), lng: Number(station.longitude)},
+            title: `${station.name}`,
+        });
+
+
+        const contentString = `${marker.title} \n ${station.address} \n ${station.owner} \n ${station.latitude}, ${station.longitude}`
+        
+      const infowindow = new google.maps.InfoWindow({
+        content: contentString,
+        ariaLabel: `${marker.title}`,
+      });
+    
+      marker.addListener("click", () => {
+        infowindow.open({
+          anchor: marker,
+          map,
+        });
+      });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
 
@@ -77,4 +113,3 @@ async function createMarkers() {
 }
 
 initMap();
-
