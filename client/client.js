@@ -34,16 +34,16 @@ let map;
 
 async function initMap() {
     const { Map } = await google.maps.importLibrary("maps");
-   
+
 
     console.log(Map);
 
     map = new Map(document.getElementById("map"), {
-    center: { lat: -34.397, lng: 150.644 },
-    zoom: 8,
-    mapId: "servoSpaMapId",
+        center: { lat: -34.397, lng: 150.644 },
+        zoom: 8,
+        mapId: "servoSpaMapId",
     });
-    
+
 
     let center = map.getCenter()
     centerCoords_div.textContent = center
@@ -70,24 +70,33 @@ async function createMarkers() {
     for (station of test) {
         const marker = new AdvancedMarkerElement({
             map,
-            position: { lat: Number(station.latitude), lng: Number(station.longitude)},
+            position: { lat: Number(station.latitude), lng: Number(station.longitude) },
             title: `${station.name}`,
         });
 
 
-        const contentString = `${marker.title} \n ${station.address} \n ${station.owner} \n ${station.latitude}, ${station.longitude}`
-        
-      const infowindow = new google.maps.InfoWindow({
-        content: contentString,
-        ariaLabel: `${marker.title}`,
-      });
-    
-      marker.addListener("click", () => {
-        infowindow.open({
-          anchor: marker,
-          map,
+        const contentString = `
+        <div id="content">
+         <h3 id="firstHeading" class="first-heading">${marker.title}</h1>
+            <div id="bodyContent">
+                <p>Address: ${station.address}</p>
+                <p>Owner: ${station.owner}</p>
+                <p>Lat: ${station.latitude}</p>
+                <p>Lng: ${station.longitude}</p>
+            </div>
+        </div>"`
+
+        const infowindow = new google.maps.InfoWindow({
+            content: contentString,
+            ariaLabel: `${marker.title}`,
         });
-      });
+
+        marker.addListener("click", () => {
+            infowindow.open({
+                anchor: marker,
+                map,
+            });
+        });
 
 
 
