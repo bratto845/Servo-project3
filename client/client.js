@@ -4,9 +4,17 @@ const servoListElem = document.querySelector('.servo-list')
 const clockDiv = document.getElementById('clock')
 
 
-const date = new Date()
-let tet = date.toLocaleString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-clockDiv.textContent = tet
+function updateTime() {
+
+    const date = new Date()
+    const options = { weekday: 'long' }
+    const day = date.toLocaleDateString([], options)
+    let tet = date.toLocaleString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+    
+    const string = `${day}, ${tet}`
+    clockDiv.textContent = string
+}
+setInterval(updateTime,(1000))
 
 
 fetch('/api/stations')
