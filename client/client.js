@@ -126,4 +126,23 @@ async function createMarkers() {
 
     }
 }
+
+
+function submitPostcodeSearch (event) {
+    event.preventDefault()
+
+    let input = document.getElementById('postcodeSearch')
+
+    let postcode = input.value
+
+    fetch(`/api/postcode/${postcode}`)
+}
+
+
+
+
+
+
+
+
 initMap();

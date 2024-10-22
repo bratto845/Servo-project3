@@ -23,6 +23,7 @@ const Station = {
         return db.query(sql)
             .then(result => result.rows)
     }
+
 }
 
 module.exports = Station
