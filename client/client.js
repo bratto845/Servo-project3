@@ -38,13 +38,16 @@ async function initMap() {
 
     console.log(Map);
 
+    let zoom = 13;
+
     map = new Map(document.getElementById("map"), {
         center: { lat: -34.397, lng: 150.644 },
-        zoom: 8,
+        zoom: 13,
+        minZoom: zoom - 5,
+        maxZoom: zoom,
         mapId: "servoSpaMapId",
     });
-
-
+    
     let center = map.getCenter()
     centerCoords_div.textContent = center
 
