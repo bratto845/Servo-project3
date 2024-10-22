@@ -12,14 +12,19 @@ h6 {
     margin: 0;
 }
 
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
 .wrapper {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
 }
 
 .left-aside *, .right-aside * {
-    width: 100%; 
-    height: 50px;
+    width: 100%;
 }
 
 .servo-img-logo {
@@ -29,4 +34,19 @@ h6 {
 
 .servo-item {
     display: flex;
+    justify-content: space-between;
+}
+
+.servo-stats {
+    display: flex;
+    flex-direction: column;
+}
+
+.servo-brand {
+    display: flex;
+}
+
+.servo-brand span {
+    display: flex;
+    justify-content: flex-end;
 }
