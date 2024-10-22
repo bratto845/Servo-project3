@@ -36,6 +36,14 @@ app.get('/api/stations', (req, res) => {
         .then(data => res.status(200).json(data))
 })
 
+app.get('/api/postcode/:id', (req, res) => {
+    let postcodeInput = req.params.id
+    console.log(postcodeInput)
+    fetch(`http://v0.postcodeapi.com.au/suburbs/${postcodeInput}.json`, {headers: {'content-type':'application/json'}})
+        .then(res => res.json())
+        .then(data => console.log(data))
+})
+
 
 
 app.get('/api/:column', (req, res) => {
