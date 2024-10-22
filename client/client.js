@@ -2,6 +2,7 @@ const centerCoords_div = document.getElementById('center-coords')
 const servoListElem = document.querySelector('.servo-list')
 
 const clockDiv = document.getElementById('clock')
+const suburb_Container = document.getElementById('suburbs')
 
 
 function updateTime() {
@@ -128,6 +129,7 @@ async function createMarkers() {
 }
 
 
+
 function submitPostcodeSearch (event) {
     event.preventDefault()
 
@@ -136,6 +138,15 @@ function submitPostcodeSearch (event) {
     let postcode = input.value
 
     fetch(`/api/postcode/${postcode}`)
+        .then(response => response.json())
+        .then(data => {
+            for (let suburb of data) {
+                let buttonElem = document.createElement('button')
+                buttonElem.textContent = suburb.name
+                suburb_Container.appendChild(buttonElem)
+
+            }
+        })
 }
 
 
