@@ -44,12 +44,17 @@ app.get('/api/postcode/:id', (req, res) => {
         .then(data => console.log(data))
 })
 
+app.get('/api/stats', (req, res) => {
+    Station.findStats()
+        .then(data => res.json(data))
+})
 
 
 app.get('/api/:column', (req, res) => {
     Station.findAllByColumn(req.params.column)
         .then(data => res.status(200).json(data))
 })
+
 
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
