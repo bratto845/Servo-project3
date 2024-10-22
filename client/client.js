@@ -6,16 +6,28 @@ const suburb_Container = document.getElementById('suburbs')
 
 
 function updateTime() {
-
     const date = new Date()
-    const options = { weekday: 'long' }
-    const day = date.toLocaleDateString([], options)
-    let tet = date.toLocaleString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-    
-    const string = `${day}, ${tet}`
-    clockDiv.textContent = string
+    let hours = date.getHours()
+
+    const day = date.toLocaleDateString([], { weekday: 'long' })
+    let time = date.toLocaleString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+
+
+
+    if (hours > 5 && hours < 18) {
+        const clockString = `${day}, ${time} 🌞`
+        clockDiv.textContent = clockString
+    } else if (hours > 18 && hours < 24) {
+        const clockString = `${day}, ${time} 🌝`
+        clockDiv.textContent = clockString
+    } else {
+        const clockString = `${day}, ${time} 🌝`
+        clockDiv.textContent = clockString
+    }
+
+
 }
-setInterval(updateTime,(1000))
+setInterval(updateTime, (1000))
 
 
 fetch('/api/stations')
@@ -54,19 +66,27 @@ const createStation = station => {
     return elem
 }
 
+function getGeoLocation() {
+    function success(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        // console.log(`Latitude: ${latitude}, Longitude: ${longitude}`)
+        initMap(latitude, longitude)
+    }
+    navigator.geolocation.getCurrentPosition(success)
+
+}
+getGeoLocation()
 
 let map;
 
-async function initMap() {
+async function initMap(latitude, longitude) {
     const { Map } = await google.maps.importLibrary("maps");
-
-
-    console.log(Map);
-
+    // console.log(Map);
     let zoom = 13;
 
     map = new Map(document.getElementById("map"), {
-        center: { lat: -34.397, lng: 150.644 },
+        center: { lat: latitude, lng: longitude },
         zoom: 13,
         minZoom: zoom - 5,
         maxZoom: zoom,
@@ -80,7 +100,7 @@ async function initMap() {
         const newCenter = map.getCenter();
         centerCoords_div.textContent = newCenter
 
-        console.log('New center:', newCenter.toJSON());
+        // console.log('New center:', newCenter);
     });
 
     createMarkers()
@@ -130,7 +150,7 @@ async function createMarkers() {
 
 
 
-function submitPostcodeSearch (event) {
+function submitPostcodeSearch(event) {
     event.preventDefault()
 
     let input = document.getElementById('postcodeSearch')
@@ -151,9 +171,4 @@ function submitPostcodeSearch (event) {
 
 
 
-
-
-
-
-
-initMap();
+// initMap();
