@@ -23,13 +23,22 @@ const createStation = station => {
 
     let img = document.createElement('img')
 
-    let content = document.createElement('h4')
-    content.innerHTML = `<h4>${station.name}<br>${station.address}</h4>`
+    let content = document.createElement('div')
+
+    let name = document.createElement('h4')
+    name.textContent = `${station.name}`
+
+    let address = document.createElement('h4')
+    address.textContent = `${station.address}`
 
     let distance = document.createElement('span')
     distance.textContent = '0m'
 
     elem.appendChild(img)
+
+    content.appendChild(name)
+    content.appendChild(address)
+
     elem.appendChild(content)
     elem.appendChild(distance)
 
