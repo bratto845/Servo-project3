@@ -1,3 +1,34 @@
+const servoListElem = document.querySelector('.servo-list')
+
+fetch('/api/stations')
+    .then(result => result.json())
+    .then(stations => {
+        for (let i = 0; i < 10; i++) {
+            servoListElem.appendChild(createStation(stations[i]))
+        }
+    })
+
+const createStation = station => {
+    let elem = document.createElement('div')
+    elem.className = 'servo-item'
+
+    let img = document.createElement('img')
+
+    let content = document.createElement('h4')
+    content.innerHTML = `<h4>${station.name}<br>${station.address}</h4>`
+
+    let distance = document.createElement('span')
+    distance.textContent = '0m'
+
+    elem.appendChild(img)
+    elem.appendChild(content)
+    elem.appendChild(distance)
+
+    return elem
+}
+
+
+
 let map;
 
 async function initMap() {
@@ -11,3 +42,4 @@ async function initMap() {
 }
 
 initMap();
+
