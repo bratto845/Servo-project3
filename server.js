@@ -24,10 +24,19 @@ app.get('/', (req, res) => {
     res.render('index.ejs')
 })
 
+
+app.get('/api/stations/all', (req, res) => {
+    Station.findAll()
+        .then(data => res.json(data))
+})
+
+
 app.get('/api/stations', (req, res) => {
     Station.findAll()
         .then(data => res.status(200).json(data))
 })
+
+
 
 app.get('/api/:column', (req, res) => {
     Station.findAllByColumn(req.params.column)
