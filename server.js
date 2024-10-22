@@ -19,6 +19,8 @@ app.use(express.static('client'))
 app.use(requestLogger)
 
 app.get('/', (req, res) => {
+    Station.findAll()
+        .then(data => data)
     res.render('index.ejs')
 })
 

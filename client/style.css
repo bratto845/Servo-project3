@@ -1,0 +1,32 @@
+* {
+    border: 1px solid black;
+    box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+}
+
+.left-aside *, .right-aside * {
+    width: 100%; 
+    height: 50px;
+}
+
+.servo-img-logo {
+    height: 35px;
+    width: 35px;
+}
+
+.servo-item {
+    display: flex;
+}
