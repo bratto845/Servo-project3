@@ -286,13 +286,13 @@ async function showStats() {
             let ulElem = document.createElement('ul')
 
 
-            h3Elem.innerHTML = `<h3>total station: ${data.total_stations}<br>total owners: ${data.total_owners}</h3>`
+            h3Elem.innerHTML = `<h3>Total Station: ${data.total_stations}<br>Total Owners: ${data.total_owners}</h3>`
             for (let station of stationList) {
                 let statsDiv = document.createElement('div')
                 stationList.className = 'servo-brand'
                 const contentString = `                            
                     <li class="stats-lines">
-                        <span>${station.owner}</span> <span>${station.count}</span> 
+                        <span>${station.owner}</span> <span id= "stats-count">${station.count}</span> 
                     </li>                                           
                 `
                 statsDiv.innerHTML = contentString
