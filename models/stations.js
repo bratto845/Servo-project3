@@ -64,7 +64,8 @@ const Station = {
         const sql = `
             SELECT * 
             FROM petrol_stations
-            WHERE latitude BETWEEN $1 AND $2 AND longitude BETWEEN $3 AND $4;
+            WHERE latitude BETWEEN $1 AND $2 AND longitude BETWEEN $3 AND $4
+            LIMIT 700;
         `
 
         return db.query(sql, [lat1, lat2, long1, long2]) 
