@@ -137,7 +137,7 @@ async function initMap(latitude, longitude) {
 
     google.maps.event.addListener(map, 'zoom_changed', () => {
         let bounds = map.getBounds()
-        // createMarkers(bounds)
+        createMarkers(bounds)
 
     }) 
     
@@ -150,10 +150,9 @@ async function initMap(latitude, longitude) {
     })
 }
 
+let markerArr = []
 
 async function createMarkers(bounds) {
-    // delete everything made from google map markers
-
     const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
 
     let lat1 = bounds.di.lo
@@ -164,14 +163,14 @@ async function createMarkers(bounds) {
 
     let res = await fetch(`/api/stations/bounds?lat1=${lat1}&lat2=${lat2}&long1=${long1}&long2=${long2}`)
 
-    let statio = await res.json()
+    let station = await res.json()
+    
+    removeAllMarkers(markerArr)
 
-    let markerArr = []
-
-    for (let i = 0; i < statio.length; i++) {
+    for (let i = 0; i < station.length; i++) {
         const servoBrandImg = document.createElement("img");
 
-        switch (statio[i].owner) {
+        switch (station[i].owner) {
             case 'Caltex':
                 servoBrandImg.src = './images/Caltex.png'
                 break;
@@ -194,8 +193,8 @@ async function createMarkers(bounds) {
 
         let marker = new AdvancedMarkerElement({
             map,
-            position: { lat: Number(statio[i].latitude), lng: Number(statio[i].longitude) },
-            title: `${statio[i].name}`,
+            position: { lat: Number(station[i].latitude), lng: Number(station[i].longitude) },
+            title: `${station[i].name}`,
             content: servoBrandImg,
         });
 
@@ -203,31 +202,36 @@ async function createMarkers(bounds) {
 
         const contentString = `
         <div id="content">
-         <h3 id="firstHeading" class="first-heading">${marker.title}</h1>
+         <h3 id="firstHeading" class="first-heading">${markerArr[i].title}</h1>
             <div id="bodyContent">
-                <p>Address: ${statio[i].address}</p>
-                <p>Owner: ${statio[i].owner}</p>
-                <p>Lat: ${statio[i].latitude}</p>
-                <p>Lng: ${statio[i].longitude}</p>
+                <p>Address: ${station[i].address}</p>
+                <p>Owner: ${station[i].owner}</p>
+                <p>Lat: ${station[i].latitude}</p>
+                <p>Lng: ${station[i].longitude}</p>
             </div>
         </div>"`
 
         const infowindow = new google.maps.InfoWindow({
             content: contentString,
-            ariaLabel: `${marker.title}`,
+            ariaLabel: `${markerArr[i].title}`,
         });
 
         markerArr[i].addListener("click", () => {
             infowindow.open({
-                anchor: marker,
+                anchor: markerArr[i],
                 map,
             });
         });
-
     }
 }
 
+function removeAllMarkers(markerArr) {
+    for(let i = 0; i < markerArr.length; i++) {
+        markerArr[i].setMap(null)
+    }
 
+    markerArr = [];
+}
 
 function submitPostcodeSearch(event) {
     event.preventDefault()
