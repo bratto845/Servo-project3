@@ -95,7 +95,6 @@ function fetchTemperature(latitude, longitude) {
 }
 
 
-
 function getGeoLocation() {
     function success(position) {
         const latitude = position.coords.latitude;
@@ -109,8 +108,10 @@ function getGeoLocation() {
 getGeoLocation()
 
 
+let centerLatitude_label = document.getElementById('center-latitude')
+let centerLongitude_label = document.getElementById('center-longitude')
 
-async function initMap(latitude, longitude, spotlight_name = '') {
+async function initMap(latitude, longitude) {
     const { Map } = await google.maps.importLibrary("maps");
 
 
@@ -128,7 +129,14 @@ async function initMap(latitude, longitude, spotlight_name = '') {
 
 
     let center = map.getCenter()
-    centerCoords_div.textContent = center
+
+    let [lat, lng] = center.toString().slice(1, -1).split(',')
+
+    
+
+    centerLatitude_label.textContent = lat
+    centerLongitude_label.textContent = lng
+
 
     google.maps.event.addListenerOnce(map, 'idle', () => {
         let bounds = map.getBounds()
@@ -142,12 +150,15 @@ async function initMap(latitude, longitude, spotlight_name = '') {
     })
 
     google.maps.event.addListener(map, 'dragend', () => {
-        const newCenter = map.getCenter()
-        centerCoords_div.textContent = newCenter
-        let bounds = map.getBounds()
+        const newCenter = map.getCenter();
+        let [lat, lng] = newCenter.toString().slice(1, -1).split(',')
 
-        createMarkers(bounds, spotlight_name)
-    })
+        centerLatitude_label.textContent = lat
+        centerLongitude_label.textContent = lng
+
+    });
+
+    createMarkers()
 }
 
 let markerArr = []
@@ -301,8 +312,6 @@ async function showSpotlight() {
 
     }
 
-
-
     await fetch('/api/stations/random')
         .then(res => res.json())
         .then(data => {
@@ -325,6 +334,33 @@ async function showSpotlight() {
 }
 showSpotlight()
 
+
+async function lookupAddress(event) {
+    event.preventDefault()
+
+    const geocoder = new google.maps.Geocoder();
+
+    let latlng = {
+        lat: Number(centerLatitude_label.textContent),
+        lng: Number(centerLongitude_label.textContent)
+    }
+
+    geocoder
+        .geocode({ location: latlng })
+        .then((response) => {
+        if (response.results[0]) {
+            console.log(response.results[0])
+
+            let address = document.getElementById('center-address')
+            address.textContent = response.results[0].formatted_address
+        }
+        })
+        .catch((e) => window.alert("Geocoder failed due to: " + e))
+
+}
+
+
+
 document.addEventListener('keydown', function (event) {
     if (event.ctrlKey && event.shiftKey && event.code === 'KeyB') {
         event.preventDefault();
@@ -339,3 +375,6 @@ document.addEventListener('keydown', function (event) {
         }
     }
 });
+
+
+

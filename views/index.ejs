@@ -62,8 +62,16 @@
                 <div class="clock-div" id="clock"></div>
             </div>
 
-            <div class="lat-long section-headers" id="center-coords"></div>
-            <div></div>
+            <div class="lat-long section-headers" id="center-coords">
+                <h1>Map Center Location</h1>
+                <form>
+                    <label id="center-latitude"></label>
+                    <label id="center-longitude"></label>
+                    <button onclick="lookupAddress(event)">Lookup Address</button>
+                </form>
+                
+            </div>
+            <div class="center-address" id="center-address"></div>
             <div class="servo-list"></div>
         </aside>
     </div>
@@ -76,6 +84,7 @@
             // Add other bootstrap parameters as needed, using camel case.
         });
     </script>
+    
     <script src="./client.js"></script>
 </body>
 
