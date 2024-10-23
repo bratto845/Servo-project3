@@ -291,8 +291,9 @@ async function showStats() {
                 let statsDiv = document.createElement('div')
                 stationList.className = 'servo-brand'
                 const contentString = `                            
-                    <li>${station.owner}</li>
-                    <span>${station.count}</span>                                            
+                    <li class="stats-lines">
+                        <span>${station.owner}</span> <span>${station.count}</span> 
+                    </li>                                           
                 `
                 statsDiv.innerHTML = contentString
                 ulElem.appendChild(statsDiv)
