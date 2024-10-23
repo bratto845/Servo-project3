@@ -52,18 +52,27 @@ const Station = {
     },
     findRandom: function(){
         const sql = `
-        SELECT *
-        FROM petrol_stations
-        ORDER BY RANDOM() LIMIT 1;
+            SELECT *
+            FROM petrol_stations
+            ORDER BY RANDOM() LIMIT 1;
         `
 
         return db.query(sql)
             .then(res => res.rows[0])
+    },
+    findAllByBounds: function(lat1, lat2, long1, long2) {
+        const sql = `
+            SELECT * 
+            FROM petrol_stations
+            WHERE latitude BETWEEN $1 AND $2 AND longitude BETWEEN $3 AND $4;
+        `
+
+        return db.query(sql, [lat1, lat2, long1, long2]) 
+            .then(result => result.rows)
     }
             
 }
-        
-    
+
 
 
 module.exports = Station

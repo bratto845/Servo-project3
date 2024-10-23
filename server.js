@@ -58,6 +58,16 @@ app.get('/api/:column', (req, res) => {
         .then(data => res.status(200).json(data))
 })
 
+app.get ('/api/stations/bounds', (req,res) => {
+    const lat1 = req.query.lat1
+    const lat2 = req.query.lat2
+    const long1 = req.query.long1
+    const long2 = req.query.long2
+
+    Station.findAllByBounds(lat1, lat2, long1, long2)
+    .then(data => res.json(data))
+})
+
 
 
 
