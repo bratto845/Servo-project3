@@ -167,11 +167,11 @@ let markerArr = []
 async function createMarkers(bounds, spotlight_name) {
     const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
 
-    let lat1 = bounds.di.lo
-    let lat2 = bounds.di.hi
+    let lat1 = bounds.bi.lo
+    let lat2 = bounds.bi.hi
 
-    let long1 = bounds.Hh.lo
-    let long2 = bounds.Hh.hi
+    let long1 = bounds.Gh.lo
+    let long2 = bounds.Gh.hi
 
     let res = await fetch(`/api/stations/bounds?lat1=${lat1}&lat2=${lat2}&long1=${long1}&long2=${long2}`)
 
