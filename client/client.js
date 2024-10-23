@@ -209,12 +209,19 @@ async function createMarkers(bounds, spotlight_name) {
             title: `${station[i].name}`,
             content: servoBrandImg,
         });
+        
+        let isWithinLat = lat1 <= marker.position.Fg && marker.position.Fg <= lat2
+        let isWithingLong = long1 <= marker.position.Hg && marker.position.Hg <= long2
+        let isWithinBounds = isWithinLat && isWithingLong
 
-        markerArr.push(marker)
+        if(!isWithinBounds) {
+            markerArr.push(marker)
+        }
+     
 
         const contentString = `
         <div id="content">
-         <h3 id="firstHeading" class="first-heading">${markerArr[i].title}</h1>
+         <h3 id="firstHeading" class="first-heading">${marker.title}</h1>
             <div id="bodyContent">
                 <p>Address: ${station[i].address}</p>
                 <p>Owner: ${station[i].owner}</p>
@@ -225,7 +232,7 @@ async function createMarkers(bounds, spotlight_name) {
 
         const infowindow = new google.maps.InfoWindow({
             content: contentString,
-            ariaLabel: `${markerArr[i].title}`,
+            ariaLabel: `${marker.title}`,
         });
         if (spotlight_name === station[i].name) {
             infowindow.open({
