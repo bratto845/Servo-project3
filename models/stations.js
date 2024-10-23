@@ -49,6 +49,16 @@ const Station = {
             owners.total_stations = totalStationsCount
             })
         return owners                    
+    },
+    findRandom: function(){
+        const sql = `
+        SELECT *
+        FROM petrol_stations
+        ORDER BY RANDOM() LIMIT 1;
+        `
+
+        return db.query(sql)
+            .then(res => res.rows[0])
     }
             
 }
