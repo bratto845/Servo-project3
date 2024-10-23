@@ -85,7 +85,7 @@ function fetchTemperature(latitude, longitude) {
     fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m&timezone=auto&forecast_days=1`)
         .then(response => response.json())
         .then(result => {
-            console.log(result.hourly.temperature_2m)
+            // console.log(result.hourly.temperature_2m)
             let date = new Date()
             let hours = date.getHours()
             let temperature = result.hourly.temperature_2m[hours]
@@ -108,12 +108,15 @@ function getGeoLocation() {
 }
 getGeoLocation()
 
-let map;
+
 
 async function initMap(latitude, longitude) {
     const { Map } = await google.maps.importLibrary("maps");
+
+
     // console.log(Map);
     let zoom = 13;
+    
 
     map = new Map(document.getElementById("map"), {
         center: { lat: latitude, lng: longitude },
@@ -122,32 +125,53 @@ async function initMap(latitude, longitude) {
         maxZoom: zoom,
         mapId: "servoSpaMapId",
     });
+    
 
     let center = map.getCenter()
     centerCoords_div.textContent = center
+    
+    google.maps.event.addListenerOnce(map, 'idle', () => {
+        let bounds = map.getBounds()
+        createMarkers(bounds)
+    })
 
+    google.maps.event.addListener(map, 'zoom_changed', () => {
+        let bounds = map.getBounds()
+        // createMarkers(bounds)
+
+    }) 
+    
     google.maps.event.addListener(map, 'dragend', () => {
-        const newCenter = map.getCenter();
+        const newCenter = map.getCenter()
         centerCoords_div.textContent = newCenter
-
-        // console.log('New center:', newCenter);
-    });
-
-    createMarkers()
+        let bounds = map.getBounds()
+            
+        createMarkers(bounds)
+    })
 }
 
 
-async function createMarkers() {
+async function createMarkers(bounds) {
+    // delete everything made from google map markers
+
     const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
 
-    let res = await fetch('/api/stations/all')
+    let lat1 = bounds.di.lo
+    let lat2 = bounds.di.hi
 
-    let test = await res.json()
+    let long1 = bounds.Hh.lo
+    let long2 = bounds.Hh.hi
 
-    for (station of test) {
+    let res = await fetch(`/api/stations/bounds?lat1=${lat1}&lat2=${lat2}&long1=${long1}&long2=${long2}`)
+
+    let statio = await res.json()
+
+    let markerArr = []
+
+    for (let i = 0; i < statio.length; i++) {
         const servoBrandImg = document.createElement("img");
 
-        switch (station.owner) {
+        switch (statio[i].owner) {
             case 'Caltex':
                 servoBrandImg.src = './images/Caltex.png'
                 break;
@@ -168,23 +192,23 @@ async function createMarkers() {
         servoBrandImg.style.width = "40px"
         servoBrandImg.style.height = "40px"
 
-        const marker = new AdvancedMarkerElement({
+        let marker = new AdvancedMarkerElement({
             map,
-            position: { lat: Number(station.latitude), lng: Number(station.longitude) },
-            title: `${station.name}`,
+            position: { lat: Number(statio[i].latitude), lng: Number(statio[i].longitude) },
+            title: `${statio[i].name}`,
             content: servoBrandImg,
         });
 
-
+        markerArr.push(marker)
 
         const contentString = `
         <div id="content">
          <h3 id="firstHeading" class="first-heading">${marker.title}</h1>
             <div id="bodyContent">
-                <p>Address: ${station.address}</p>
-                <p>Owner: ${station.owner}</p>
-                <p>Lat: ${station.latitude}</p>
-                <p>Lng: ${station.longitude}</p>
+                <p>Address: ${statio[i].address}</p>
+                <p>Owner: ${statio[i].owner}</p>
+                <p>Lat: ${statio[i].latitude}</p>
+                <p>Lng: ${statio[i].longitude}</p>
             </div>
         </div>"`
 
@@ -193,7 +217,7 @@ async function createMarkers() {
             ariaLabel: `${marker.title}`,
         });
 
-        marker.addListener("click", () => {
+        markerArr[i].addListener("click", () => {
             infowindow.open({
                 anchor: marker,
                 map,
