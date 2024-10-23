@@ -20,25 +20,25 @@
         <aside class="left-aside">
             <div class="star"></div>
             <div class="spotlight">
-                <div>
-                    <h2>Spotlight</h2>
+                <div id="spotlight-header">
+                    <h2 class="section-headers">Spotlight</h2>
                     <a onclick="showSpotlight()">Refresh</a>
                 </div>
                 
             </div>
             <div class="servo-stats">
-                <h2>Stats</h2>
+                <h2 class="section-headers">Stats</h2>
 
             </div>
             <div>
-                <h2>Postcode</h2>
+                <h2 class="section-headers">Postcode</h2>
                 <form>
                     <input type="text" id="postcodeSearch">
                     <button onclick="submitPostcodeSearch(event)">Search</button>
                 </form>
             </div>
             <div class="about-info">
-                <h4>G`day Devs</h4>
+                <h3 class="section-headers">G`day Devs</h3>
                 <ul>
                     <li>Brittany(gitlord)</li>
                     <li>Jin</li>
@@ -57,12 +57,12 @@
 
         <aside class="right-aside">
 
-            <div class="clock-temperature-wrapper">
+            <div class="clock-temperature-wrapper section-headers">
                 <div class="temperature-div hidden" id="temperature"></div>
                 <div class="clock-div" id="clock"></div>
             </div>
 
-            <div class="lat-long" id="center-coords"></div>
+            <div class="lat-long section-headers" id="center-coords"></div>
             <div></div>
             <div class="servo-list"></div>
         </aside>
