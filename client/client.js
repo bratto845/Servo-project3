@@ -1,8 +1,10 @@
 const centerCoords_div = document.getElementById('center-coords')
 const servoListElem = document.querySelector('.servo-list')
+const servoStats = document.querySelector('.servo-stats')
 
 const clockDiv = document.getElementById('clock')
 const suburb_Container = document.getElementById('suburbs')
+
 
 
 function updateTime() {
@@ -160,6 +162,7 @@ function submitPostcodeSearch(event) {
     fetch(`/api/postcode/${postcode}`)
         .then(response => response.json())
         .then(data => {
+            suburb_Container.innerHTML = ''
             for (let suburb of data) {
                 let buttonElem = document.createElement('button')
                 buttonElem.textContent = suburb.name
@@ -168,6 +171,38 @@ function submitPostcodeSearch(event) {
             }
         })
 }
+
+
+async function showStats() {
+    await fetch('/api/stats')
+        .then(res => res.json())
+        .then(data => {
+            const stationList = data.owners
+            stationList.sort((a, b) => b.count - a.count)
+
+            let h3Elem = document.createElement('h3')
+            let ulElem = document.createElement('ul')
+    
+
+            h3Elem.innerHTML = `<h3>total station: ${data.total_stations}<br>total owners: ${data.total_owners}</h3>`
+            for (let station of stationList) {
+                let statsDiv = document.createElement('div')
+                stationList.className = 'servo-brand'
+                const contentString = `                            
+                    <li>${station.owner}</li>
+                    <span>${station.count}</span>                                            
+                `
+                statsDiv.innerHTML = contentString
+                ulElem.appendChild(statsDiv)                       
+
+            }
+            servoStats.appendChild(h3Elem)
+            servoStats.appendChild(ulElem)
+        })   
+    
+    
+}
+showStats()
 
 
 
