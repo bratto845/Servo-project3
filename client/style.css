@@ -76,6 +76,11 @@ ul {
 .section-headers{
     background-color: lightgrey;
 }
+.stats-lines{
+    display: inline-flex;
+    justify-content: space-between flex-end;
+    border: lightgreen solid 0.5px;
+}
 
 .hidden {
     display: none;
