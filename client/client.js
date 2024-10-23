@@ -234,9 +234,9 @@ async function createMarkers(bounds, spotlight_name) {
             });
         }
 
-        markerArr[i].addListener("click", () => {
+        marker.addListener("click", () => {
             infowindow.open({
-                anchor: markerArr[i],
+                anchor: marker,
                 map,
             });
         });
