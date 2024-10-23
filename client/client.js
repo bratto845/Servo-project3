@@ -200,6 +200,7 @@ function submitPostcodeSearch(event) {
 }
 
 
+
 async function showStats() {
     await fetch('/api/stats')
         .then(res => res.json())
@@ -231,6 +232,17 @@ async function showStats() {
 }
 showStats()
 
+document.addEventListener('keydown', function(event) {
+    if (event.ctrlKey && event.shiftKey && event.code === 'KeyB') {
+        event.preventDefault();
+        let sidebars = document.querySelectorAll('aside')
 
-
-// initMap();
+        for (let aside of sidebars) {
+            if (aside.style.visibility === 'hidden') {
+                aside.style.visibility = 'visible'
+            } else {
+                aside.style.visibility = 'hidden'
+            }
+        }
+    }
+});
