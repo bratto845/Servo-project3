@@ -138,18 +138,43 @@ async function initMap(latitude, longitude) {
 
 
 async function createMarkers() {
-    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+    const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
 
     let res = await fetch('/api/stations/all')
 
     let test = await res.json()
 
     for (station of test) {
+        const servoBrandImg = document.createElement("img");
+
+        switch (station.owner) {
+            case 'Caltex':
+                servoBrandImg.src = './images/Caltex.png'
+                break;
+            case 'BP':
+                servoBrandImg.src = './images/BP.png'
+                break;
+            case '7-Eleven Pty Ltd':
+                servoBrandImg.src = './images/7-Eleven.svg'
+                break;
+            case 'Shell':
+                servoBrandImg.src = './images/Shell.png'
+                break;
+            default:
+                servoBrandImg.src = './images/Default.png'
+                break;
+        }
+
+        servoBrandImg.style.width = "40px"
+        servoBrandImg.style.height = "40px"
+
         const marker = new AdvancedMarkerElement({
             map,
             position: { lat: Number(station.latitude), lng: Number(station.longitude) },
             title: `${station.name}`,
+            content: servoBrandImg,
         });
+
 
 
         const contentString = `
