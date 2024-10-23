@@ -216,6 +216,12 @@ async function createMarkers(bounds) {
             content: contentString,
             ariaLabel: `${marker.title}`,
         });
+        // if (spotLightStationBool) {
+        //     infowindow.open({
+        //         anchor: marker,
+        //         map,
+        //     });
+        // }
 
         markerArr[i].addListener("click", () => {
             infowindow.open({
@@ -296,11 +302,13 @@ async function showSpotlight() {
     await fetch('/api/stations/random')
         .then(res => res.json())
         .then(data => {
-
+            console.log(data);
+            
             let spotlight_div = document.createElement('div')
             let spotlightTitle = document.createElement('a')
             let spotlightAddress = document.createElement('span')
 
+            spotlightTitle.addEventListener('click',() => initMap(parseFloat(data.latitude), parseFloat(data.longitude)))
             spotlightTitle.innerHTML = data.name
             spotlightAddress.innerHTML = data.address
 
