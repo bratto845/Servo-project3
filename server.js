@@ -58,18 +58,36 @@ app.get('/api/:column', (req, res) => {
         .then(data => res.status(200).json(data))
 })
 
-app.get ('/api/stations/bounds', (req,res) => {
+app.get ('/api/stations/bounds', (req, res) => {
     const lat1 = req.query.lat1
     const lat2 = req.query.lat2
     const long1 = req.query.long1
     const long2 = req.query.long2
 
     Station.findAllByBounds(lat1, lat2, long1, long2)
-    .then(data => res.json(data))
+        .then(data => res.json(data))
 })
 
+app.get('/api/stations/nearest', (req, res) => {
+    const lat = parseFloat(req.query.lat)
+    const long = parseFloat(req.query.long)
+    const radius = parseFloat(req.query.radius)
 
+    const toRadians = degrees => degrees * (Math.PI / 180)
 
+    const latOffset = radius / 111.32; // Latitude offset
+    const lonOffset = radius / (111.32 * Math.cos(toRadians(lat))); // Longitude offset
+    
+    const minLat = lat - latOffset
+    const maxLat = lat + latOffset
+    const minLong = long - lonOffset
+    const maxLong = long + lonOffset
+    
+    console.log(minLat, maxLat, minLong, maxLong)
+
+    Station.findAllByBounds(minLat, maxLat, minLong, maxLong)
+        .then(data => res.json(data))
+})
 
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
