@@ -1,6 +1,7 @@
 const centerCoords_div = document.getElementById('center-coords')
 const servoListElem = document.querySelector('.servo-list')
 const servoStats = document.querySelector('.servo-stats')
+const spotLight = document.querySelector('.spotlight')
 
 const clockWrapper = document.querySelector('.clock-temperature-wrapper')
 const clockDiv = document.getElementById('clock')
@@ -28,9 +29,9 @@ function updateTime() {
         const clockString = `${day}, ${time} 🌝`
         clockDiv.textContent = clockString
     }
-    
+
 }
-setInterval(updateTime, 1000) 
+setInterval(updateTime, 1000)
 
 
 
@@ -71,7 +72,7 @@ const createStation = station => {
 }
 
 
-function toggleClock(){ 
+function toggleClock() {
     temperatureDiv.classList.toggle('hidden')
     clockDiv.classList.toggle('hidden')
 }
@@ -80,16 +81,16 @@ clockWrapper.addEventListener('click', toggleClock)
 
 
 
-function fetchTemperature(latitude, longitude){
+function fetchTemperature(latitude, longitude) {
     fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m&timezone=auto&forecast_days=1`)
-    .then(response => response.json())
-    .then(result => {
-        console.log(result.hourly.temperature_2m)
-        let date = new Date()
-        let hours = date.getHours()
-        let temperature = result.hourly.temperature_2m[hours]
-        temperatureDiv.innerText = temperature
-    })
+        .then(response => response.json())
+        .then(result => {
+            console.log(result.hourly.temperature_2m)
+            let date = new Date()
+            let hours = date.getHours()
+            let temperature = result.hourly.temperature_2m[hours]
+            temperatureDiv.innerText = temperature
+        })
 
 }
 
@@ -210,7 +211,7 @@ async function showStats() {
 
             let h3Elem = document.createElement('h3')
             let ulElem = document.createElement('ul')
-    
+
 
             h3Elem.innerHTML = `<h3>total station: ${data.total_stations}<br>total owners: ${data.total_owners}</h3>`
             for (let station of stationList) {
@@ -221,18 +222,49 @@ async function showStats() {
                     <span>${station.count}</span>                                            
                 `
                 statsDiv.innerHTML = contentString
-                ulElem.appendChild(statsDiv)                       
+                ulElem.appendChild(statsDiv)
 
             }
             servoStats.appendChild(h3Elem)
             servoStats.appendChild(ulElem)
-        })   
-    
-    
+        })
+
+
 }
 showStats()
 
-document.addEventListener('keydown', function(event) {
+async function showSpotlight() {
+
+    let currentSpotlight = document.querySelector('.current-spotlight')
+
+    if (currentSpotlight) {
+        currentSpotlight.remove()
+
+    }
+
+
+
+    await fetch('/api/stations/random')
+        .then(res => res.json())
+        .then(data => {
+
+            let spotlight_div = document.createElement('div')
+            let spotlightTitle = document.createElement('a')
+            let spotlightAddress = document.createElement('span')
+
+            spotlightTitle.innerHTML = data.name
+            spotlightAddress.innerHTML = data.address
+
+            spotlight_div.appendChild(spotlightTitle)
+            spotlight_div.appendChild(spotlightAddress)
+            spotlight_div.className = 'current-spotlight'
+            spotLight.appendChild(spotlight_div)
+        })
+
+}
+showSpotlight()
+
+document.addEventListener('keydown', function (event) {
     if (event.ctrlKey && event.shiftKey && event.code === 'KeyB') {
         event.preventDefault();
         let sidebars = document.querySelectorAll('aside')

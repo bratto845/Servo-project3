@@ -24,6 +24,10 @@ app.get('/', (req, res) => {
     res.render('index.ejs')
 })
 
+app.get('/api/stations/random', (req, res)=>{
+    Station.findRandom()
+        .then(data =>res.json(data))
+})
 
 app.get('/api/stations/all', (req, res) => {
     Station.findAll()
@@ -53,6 +57,8 @@ app.get('/api/:column', (req, res) => {
     Station.findAllByColumn(req.params.column)
         .then(data => res.status(200).json(data))
 })
+
+
 
 
 app.listen(port, () => {
