@@ -2,7 +2,9 @@ const centerCoords_div = document.getElementById('center-coords')
 const servoListElem = document.querySelector('.servo-list')
 const servoStats = document.querySelector('.servo-stats')
 
+const clockWrapper = document.querySelector('.clock-temperature-wrapper')
 const clockDiv = document.getElementById('clock')
+const temperatureDiv = document.getElementById('temperature')
 const suburb_Container = document.getElementById('suburbs')
 
 
@@ -26,10 +28,10 @@ function updateTime() {
         const clockString = `${day}, ${time} 🌝`
         clockDiv.textContent = clockString
     }
-
-
+    
 }
-setInterval(updateTime, (1000))
+setInterval(updateTime, 1000) 
+
 
 
 fetch('/api/stations')
@@ -68,15 +70,40 @@ const createStation = station => {
     return elem
 }
 
+
+function toggleClock(){ 
+    temperatureDiv.classList.toggle('hidden')
+    clockDiv.classList.toggle('hidden')
+}
+
+clockWrapper.addEventListener('click', toggleClock)
+
+
+
+function fetchTemperature(latitude, longitude){
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m&timezone=auto&forecast_days=1`)
+    .then(response => response.json())
+    .then(result => {
+        console.log(result.hourly.temperature_2m)
+        let date = new Date()
+        let hours = date.getHours()
+        let temperature = result.hourly.temperature_2m[hours]
+        temperatureDiv.innerText = temperature
+    })
+
+}
+
+
+
 function getGeoLocation() {
     function success(position) {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
         // console.log(`Latitude: ${latitude}, Longitude: ${longitude}`)
         initMap(latitude, longitude)
+        fetchTemperature(latitude, longitude)
     }
     navigator.geolocation.getCurrentPosition(success)
-
 }
 getGeoLocation()
 

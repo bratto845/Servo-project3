@@ -60,3 +60,10 @@ ul {
     font-size: 200%;
     background-color: #32cd32;
 }
+
+
+.hidden {
+    display: none;
+}
+
+
