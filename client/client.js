@@ -110,13 +110,13 @@ getGeoLocation()
 
 
 
-async function initMap(latitude, longitude) {
+async function initMap(latitude, longitude, spotlight_name = '') {
     const { Map } = await google.maps.importLibrary("maps");
 
 
     // console.log(Map);
     let zoom = 13;
-    
+
 
     map = new Map(document.getElementById("map"), {
         center: { lat: latitude, lng: longitude },
@@ -125,34 +125,34 @@ async function initMap(latitude, longitude) {
         maxZoom: zoom,
         mapId: "servoSpaMapId",
     });
-    
+
 
     let center = map.getCenter()
     centerCoords_div.textContent = center
-    
+
     google.maps.event.addListenerOnce(map, 'idle', () => {
         let bounds = map.getBounds()
-        createMarkers(bounds)
+        createMarkers(bounds, spotlight_name)
     })
 
     google.maps.event.addListener(map, 'zoom_changed', () => {
         let bounds = map.getBounds()
-        createMarkers(bounds)
+        createMarkers(bounds, spotlight_name)
 
-    }) 
-    
+    })
+
     google.maps.event.addListener(map, 'dragend', () => {
         const newCenter = map.getCenter()
         centerCoords_div.textContent = newCenter
         let bounds = map.getBounds()
-            
-        createMarkers(bounds)
+
+        createMarkers(bounds, spotlight_name)
     })
 }
 
 let markerArr = []
 
-async function createMarkers(bounds) {
+async function createMarkers(bounds, spotlight_name) {
     const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
 
     let lat1 = bounds.di.lo
@@ -164,7 +164,7 @@ async function createMarkers(bounds) {
     let res = await fetch(`/api/stations/bounds?lat1=${lat1}&lat2=${lat2}&long1=${long1}&long2=${long2}`)
 
     let station = await res.json()
-    
+
     removeAllMarkers(markerArr)
 
     for (let i = 0; i < station.length; i++) {
@@ -215,12 +215,12 @@ async function createMarkers(bounds) {
             content: contentString,
             ariaLabel: `${markerArr[i].title}`,
         });
-        // if (spotLightStationBool) {
-        //     infowindow.open({
-        //         anchor: marker,
-        //         map,
-        //     });
-        // }
+        if (spotlight_name === station[i].name) {
+            infowindow.open({
+                anchor: marker,
+                map,
+            });
+        }
 
         markerArr[i].addListener("click", () => {
             infowindow.open({
@@ -232,7 +232,7 @@ async function createMarkers(bounds) {
 }
 
 function removeAllMarkers(markerArr) {
-    for(let i = 0; i < markerArr.length; i++) {
+    for (let i = 0; i < markerArr.length; i++) {
         markerArr[i].setMap(null)
     }
 
@@ -307,12 +307,12 @@ async function showSpotlight() {
         .then(res => res.json())
         .then(data => {
             console.log(data);
-            
+
             let spotlight_div = document.createElement('div')
             let spotlightTitle = document.createElement('a')
             let spotlightAddress = document.createElement('span')
 
-            spotlightTitle.addEventListener('click',() => initMap(parseFloat(data.latitude), parseFloat(data.longitude)))
+            spotlightTitle.addEventListener('click', () => initMap(parseFloat(data.latitude), parseFloat(data.longitude), data.name))
             spotlightTitle.innerHTML = data.name
             spotlightAddress.innerHTML = data.address
 
