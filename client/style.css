@@ -1,7 +1,7 @@
-* {
+/* * {
     border: 1px solid black;
     box-sizing: border-box;
-}
+} */
 
 h1,
 h2,
@@ -60,7 +60,22 @@ ul {
     font-size: 200%;
     background-color: #32cd32;
 }
-
+#spotlight-header{
+    display: inline-flex;
+    justify-content: space-between;
+    background-color: lightgrey;
+    align-items: center;
+    padding: 7px;
+   
+}
+#spotlight-header a{
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 15px;
+}
+.section-headers{
+    background-color: lightgrey;
+}
 
 .hidden {
     display: none;
