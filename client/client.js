@@ -6,7 +6,8 @@ const spotLight = document.querySelector('.spotlight')
 const clockWrapper = document.querySelector('.clock-temperature-wrapper')
 const clockDiv = document.getElementById('clock')
 const temperatureDiv = document.getElementById('temperature')
-const suburb_Container = document.getElementById('suburbs')
+const suburb_Container = document.getElementById('postcodeSearch')
+const postcodeResults = document.getElementById('postcodeResults')
 
 
 
@@ -111,7 +112,7 @@ getGeoLocation()
 let centerLatitude_label = document.getElementById('center-latitude')
 let centerLongitude_label = document.getElementById('center-longitude')
 
-async function initMap(latitude, longitude) {
+async function initMap(latitude, longitude, spotlight_name = '') {
     const { Map } = await google.maps.importLibrary("maps");
 
 
@@ -156,9 +157,9 @@ async function initMap(latitude, longitude) {
         centerLatitude_label.textContent = lat
         centerLongitude_label.textContent = lng
 
+        let bounds = map.getBounds()
+        createMarkers(bounds, spotlight_name)
     });
-
-    createMarkers()
 }
 
 let markerArr = []
@@ -250,6 +251,7 @@ function removeAllMarkers(markerArr) {
     markerArr = [];
 }
 
+
 function submitPostcodeSearch(event) {
     event.preventDefault()
 
@@ -260,11 +262,12 @@ function submitPostcodeSearch(event) {
     fetch(`/api/postcode/${postcode}`)
         .then(response => response.json())
         .then(data => {
-            suburb_Container.innerHTML = ''
+            console.log(data)
+            postcodeResults.innerHTML = ''
             for (let suburb of data) {
                 let buttonElem = document.createElement('button')
                 buttonElem.textContent = suburb.name
-                suburb_Container.appendChild(buttonElem)
+                postcodeResults.appendChild(buttonElem)
 
             }
         })
