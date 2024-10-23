@@ -24,7 +24,7 @@
                     <h2 class="section-headers">Spotlight</h2>
                     <a onclick="showSpotlight()">Refresh</a>
                 </div>
-                
+
             </div>
             <div class="servo-stats">
                 <h2 class="section-headers">Stats</h2>
@@ -34,7 +34,7 @@
                 <h2 class="section-headers">Postcode</h2>
                 <form>
                     <input type="text" id="postcodeSearch">
-                    <button onclick="submitPostcodeSearch(event)">Search</button>
+                    <button class="btn" onclick="submitPostcodeSearch(event)">Search</button>
                 </form>
                 <div id="postcodeResults">
 
@@ -43,7 +43,7 @@
             <div class="about-info">
                 <h3 class="section-headers">G`day Devs</h3>
                 <ul>
-                    <li>Brittany(gitlord)</li>
+                    <li>Brittany</li>
                     <li>Jin</li>
                     <li>Nicolas</li>
                     <li>Oliver</li>
@@ -70,9 +70,9 @@
                 <form>
                     <label id="center-latitude"></label>
                     <label id="center-longitude"></label>
-                    <button onclick="lookupAddress(event)">Lookup Address</button>
+                    <button class="btn" onclick="lookupAddress(event)">Lookup Address</button>
                 </form>
-                
+
             </div>
             <div class="center-address" id="center-address"></div>
             <div class="servo-list"></div>
@@ -87,7 +87,7 @@
             // Add other bootstrap parameters as needed, using camel case.
         });
     </script>
-    
+
     <script src="./client.js"></script>
 </body>
 

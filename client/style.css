@@ -59,31 +59,103 @@ ul {
     text-align: center;
     font-size: 200%;
     background-color: #32cd32;
+    color: white;
+    text-shadow: lightgray 5px;
 }
-#spotlight-header{
+
+#spotlight-header {
     display: inline-flex;
     justify-content: space-between;
     background-color: lightgrey;
     align-items: center;
     padding: 7px;
-   
+
 }
-#spotlight-header a{
+
+#spotlight-header a {
     display: flex;
     justify-content: flex-end;
     padding-right: 15px;
 }
-.section-headers{
+
+.section-headers {
     background-color: lightgrey;
 }
-.stats-lines{
+
+.stats-lines {
     display: inline-flex;
-    justify-content: space-between flex-end;
+    justify-content: space-between;
     border: lightgreen solid 0.5px;
+}
+
+.stats-lines #stats-count {
+    display: flex;
+    justify-content: right;
+    margin-right: 20px;
+}
+
+.current-spotlight {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    padding: 10px;
+
+}
+
+.current-spotlight a {
+    color: blue;
+    margin-bottom: 5px;
+}
+.clock-temperature-wrapper{
+    text-align: center;
+    padding: 10px;
+}
+.lat-long{
+    text-align: left;
+    padding: 10px;
+}
+.lat-long > form {
+    display: flex;           
+    justify-content: center;  
+    align-items: center;     
+    flex-direction: column;   
+}
+
+.lat-long > form > button{
+    text-align: center;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.btn {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 0.7em 1.4em 0.7em 1.1em;
+    color: white;
+    background: linear-gradient(0deg, rgba(20, 167, 62, 1) 0%, rgba(102, 247, 113, 1) 100%);
+    border: none;
+    box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
+    letter-spacing: 0.05em;
+    border-radius: 20em;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    width: 100px;
+}
+
+.btn:hover {
+    box-shadow: 0 0.5em 1.5em -0.5em #14a73e98;
+}
+
+.btn:active {
+    box-shadow: 0 0.3em 1em -0.5em #14a73e98;
 }
 
 .hidden {
     display: none;
 }
-
-
