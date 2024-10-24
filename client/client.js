@@ -538,40 +538,6 @@ function toggleDistance() {
     }
 }
 
-function tempDisplayNearestStations() {
-
-    for (station of stations) {
-
-        let contentString = `
-            <div class="servo-item">
-                <img src="" alt="">
-                <div>
-                    <h4>{station.name}</h4>
-                    <h4>{station.address}</h4>
-                </div>
-                <span class="servo-distance">{distance}</span>
-            </div>
-        `
-
-
-
-        
-        let servoItem_Div = document.createElement('div')
-        servoItem_Div.className = "servo-item"
-
-        servoItem_Div.innerHTML = contentString
-
-        servoListElem.appendChild(servoItem_Div)
-
-        // spotlightTitle.addEventListener('click', () => initMap(parseFloat(data.latitude), parseFloat(data.longitude), data.name))
-
-    }
-
-
-
-}
-
-
 document.addEventListener('keydown', function (event) {
     if (event.ctrlKey && event.shiftKey && event.code === 'KeyB') {
         event.preventDefault();
