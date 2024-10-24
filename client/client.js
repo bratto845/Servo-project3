@@ -243,6 +243,13 @@ async function createMarkers(bounds, spotlight_name) {
             content: contentString,
             ariaLabel: `${marker.title}`,
         });
+
+
+        
+
+        
+
+
         if (spotlight_name === station[i].name) {
             infowindow.open({
                 anchor: marker,
@@ -392,7 +399,6 @@ async function lookupAddress(event) {
         .geocode({ location: latlng })
         .then((response) => {
         if (response.results[0]) {
-            console.log(response.results[0])
 
             let address = document.getElementById('center-address')
             address.textContent = response.results[0].formatted_address
@@ -405,7 +411,7 @@ async function lookupAddress(event) {
 let stationFilteredDetailList = []
 
 function findNearestStations(lat, lng) {
-    fetch(`http://localhost:4567/api/stations/nearest?lat=${lat}&long=${lng}&radius=50`)
+    fetch(`http://localhost:4567/api/stations/nearest?lat=${lat}&long=${lng}&radius=3`)
         .then(res => res.json())
         .then(stations => {
             let destinations = ''
@@ -421,14 +427,12 @@ function findNearestStations(lat, lng) {
 
                 stationFilteredDetailList.push([stations[i].name, stations[i].owner, stations[i].latitude, stations[i].longitude])
             }
-            
-            console.log(stationFilteredDetailList)
-
-            return fetch(`/api/stations/matrix?lat=${lat}&lng=${lng}&destinations=${destinations.slice(0, destinations.length - 1)}`)
+            console.log(`/api/stations/matrix?lat=${lat}&lng=${lng.trim()}&destinations=${destinations.slice(0, destinations.length - 1)}`)
+            return fetch(`/api/stations/matrix?lat=${lat}&lng=${lng.trim()}&destinations=${destinations.slice(0, destinations.length - 1)}`)
         })
         .then(res => res.json())
         .then(data => {
-
+            console.log('working')
             let stationDetails = []
 
             for (i = 0; i < stationFilteredDetailList.length; i++) {
@@ -452,12 +456,13 @@ function findNearestStations(lat, lng) {
 
                 return distanceA - distanceB;
             })
+            
+            servoListElem.innerHTML = ""
 
             console.log(stationDetails)
 
-            
-            servoListElem.innerHTML = ""
-            for (station of stationDetails) {
+            for (let station of stationDetails) {
+                console.log("1")
 
                 let stationImgSrc = ""
 
@@ -478,7 +483,7 @@ function findNearestStations(lat, lng) {
                         stationImgSrc = './images/Default.png'
                         break;
                 }
-
+                
                 let servoItem_Img = document.createElement('img')
                 servoItem_Img.src = `${stationImgSrc}`
                 servoItem_Img.className = 'servo-item-img'
