@@ -272,21 +272,23 @@ async function createMarkers(bounds, spotlight_name) {
                     })
                 .then(res => res.json())
                 .then(data => {
-                    
-                })
-                
+                    if (data[0].is_saved) {
+                        fetch('/api/stations/favourites')
+                            .then(res => res.json())
+                            .then(result => {
+                                starDiv.innerText = `${result.length} ⭐️`
+                            })
+                    }
+                })  
             })
-            
-            
-            
         })
 
         marker.addListener("click", () => {
             infowindow.open({
                 anchor: marker,
                 map,
-            });
-        });
+            })
+        })
     }
 }
 
@@ -295,7 +297,7 @@ function removeAllMarkers(markerArr) {
         markerArr[i].setMap(null)
     }
 
-    markerArr = [];
+    markerArr = []
 }
 
 
