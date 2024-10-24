@@ -274,8 +274,7 @@ async function createMarkers(bounds, spotlight_name) {
                         console.log(counter)
                     }
                     
-                }
-                )
+                })
 
                 })
             
@@ -417,7 +416,7 @@ async function lookupAddress(event) {
 let stationFilteredDetailList = []
 
 function findNearestStations(lat, lng) {
-    fetch(`http://localhost:4567/api/stations/nearest?lat=${lat}&long=${lng}&radius=3`)
+    fetch(`http://localhost:4567/api/stations/nearest?lat=${lat}&long=${lng}&radius=50`)
         .then(res => res.json())
         .then(stations => {
             let destinations = ''
