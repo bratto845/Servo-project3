@@ -94,8 +94,11 @@ app.get('/api/stations/matrix', (req, res) => {
     const lng = req.query.lng
     const destinations = req.query.destinations
 
+    console.log(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${lat},${lng}&destinations=${destinations}&key=${ process.env.GOOGLE_MAPS_API }`)
+
     fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${lat},${lng}&destinations=${destinations}&key=${ process.env.GOOGLE_MAPS_API }`)
         .then(response => response.json())
+        .then(data => res.json(data))
 })
 
 app.patch ('/api/stations/:id/save', (req, res) => {
