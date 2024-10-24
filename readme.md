@@ -52,23 +52,23 @@ Project 3, Servo, is a single page application (SPA) where the group, G'day devs
 ## The process 
 
 ### Planning stages 
-![screen shots]('.client/images/servo_images/sketch.png')
+![screen shots](./client/images/servo_images/sketch.png)
 
-![screen shots]()
+![screen shots](./client/images/servo_images/image%20(1).png)
 
-![screen shots]()
+![screen shots](./client/images/servo_images/image%20(2).png)
 
-![screen shots]()
+![screen shots](./client/images/servo_images/image%20(3).png)
 
-![screen shots]()
+![screen shots](./client/images/servo_images/image%20(4).png)
 
-![screen shots]()
+![screen shots](./client/images/servo_images/image%20(5).png)
 
-![screen shots]()
+![screen shots](./client/images/servo_images/image%20(6).png)
 
-![screen shots]()
+![screen shots](./client/images/servo_images/image%20(7).png)
 
-![screen shots]()
+![screen shots](./client/images/servo_images/image%20(8).png)
 
 ## Bugs
 
