@@ -72,6 +72,19 @@ const Station = {
             .then(result => result.rows)
     },
     
+    saveStation: function(params) {
+        const sql =`
+            UPDATE petrol_stations
+            SET
+            is_saved = TRUE
+            WHERE id = $1
+            RETURNING *;
+        `
+        return db.query(sql, [params])
+            .then(result => result.rows)
+            
+    }
+
             
 }
 

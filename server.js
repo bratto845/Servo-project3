@@ -96,6 +96,10 @@ app.get('/api/stations/matrix', (req, res) => {
 
     fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${lat},${lng}&destinations=${destinations}&key=${ process.env.GOOGLE_MAPS_API }`)
         .then(response => response.json())
+})
+
+app.patch ('/api/stations/:id/save', (req, res) => {
+    Station.saveStation(req.params.id)
         .then(data => res.json(data))
 })
 
