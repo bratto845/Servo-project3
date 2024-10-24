@@ -2,6 +2,8 @@ const centerCoords_div = document.getElementById('center-coords')
 const servoListElem = document.querySelector('.servo-list')
 const servoStats = document.querySelector('.servo-stats')
 const spotLight = document.querySelector('.spotlight')
+const starDiv = document.querySelector('.star')
+
 
 const clockWrapper = document.querySelector('.clock-temperature-wrapper')
 const clockDiv = document.getElementById('clock')
@@ -9,6 +11,9 @@ const temperatureDiv = document.getElementById('temperature')
 const suburb_Container = document.getElementById('postcodeSearch')
 const postcodeResults = document.getElementById('postcodeResults')
 const meterToggleBtn = document.querySelector('.meter-toggle-btn')
+var counter = 0 
+
+
 
 function updateTime() {
     const date = new Date()
@@ -236,8 +241,9 @@ async function createMarkers(bounds, spotlight_name) {
                 <p>Owner: ${station[i].owner}</p>
                 <p>Lat: ${station[i].latitude}</p>
                 <p>Lng: ${station[i].longitude}</p>
+                <button class="save-btn" value="${station[i].id}">save</button>
             </div>
-        </div>"`
+        </div>`
 
         const infowindow = new google.maps.InfoWindow({
             content: contentString,
@@ -266,17 +272,18 @@ async function createMarkers(bounds, spotlight_name) {
                     })
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data);
-                    
-                   
-                    if(data.is_saved === true) {
+                    if(data[0].is_saved) {
                         counter++                      
                         console.log(counter)
+                        console.log(savedCounter);
+                        
+                        starDiv.innerText = counter
                     }
                     
                 })
-
-                })
+                
+            })
+            
             
             
         })
