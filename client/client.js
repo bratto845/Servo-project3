@@ -1,11 +1,7 @@
-
-
 const centerCoords_div = document.getElementById('center-coords')
 const servoListElem = document.querySelector('.servo-list')
 const servoStats = document.querySelector('.servo-stats')
 const spotLight = document.querySelector('.spotlight')
-const starDiv = document.querySelector('.star')
-
 
 const clockWrapper = document.querySelector('.clock-temperature-wrapper')
 const clockDiv = document.getElementById('clock')
@@ -13,8 +9,6 @@ const temperatureDiv = document.getElementById('temperature')
 const suburb_Container = document.getElementById('postcodeSearch')
 const postcodeResults = document.getElementById('postcodeResults')
 const meterToggleBtn = document.querySelector('.meter-toggle-btn')
-
-var counter = 0
 
 function updateTime() {
     const date = new Date()
@@ -242,10 +236,9 @@ async function createMarkers(bounds, spotlight_name) {
                 <p>Owner: ${station[i].owner}</p>
                 <p>Lat: ${station[i].latitude}</p>
                 <p>Lng: ${station[i].longitude}</p>
-                <button value='${station[i].id}' class='save-btn'>Save</button>
             </div>
         </div>"`
-        
+
         const infowindow = new google.maps.InfoWindow({
             content: contentString,
             ariaLabel: `${marker.title}`,
@@ -256,43 +249,15 @@ async function createMarkers(bounds, spotlight_name) {
                 map,
             });
         }
-        
-        infowindow.addListener('visible', (event) => {
-            const saveBtn = document.querySelector('.save-btn');
-                saveBtn.addEventListener('click', () => {
-                    fetch(`/api/stations/${saveBtn.value}/save`, {
-                        method: 'PATCH'                                       
-
-                    })
-                .then(res => res.json())
-                .then(data => {
-                    console.log(data);
-                    
-                   
-                    if(data.is_saved === true) {
-                        counter++                      
-                        console.log(counter)
-                    }
-                    
-                }
-                )
-
-                })
-            
-            
-        })
 
         marker.addListener("click", () => {
             infowindow.open({
                 anchor: marker,
                 map,
             });
-                        
         });
     }
-    
 }
-
 
 function removeAllMarkers(markerArr) {
     for (let i = 0; i < markerArr.length; i++) {
@@ -370,7 +335,6 @@ async function showSpotlight() {
     await fetch('/api/stations/random')
         .then(res => res.json())
         .then(data => {
-            
 
             let spotlight_div = document.createElement('div')
             let spotlightTitle = document.createElement('a')
