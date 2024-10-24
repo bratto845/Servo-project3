@@ -249,6 +249,30 @@ async function createMarkers(bounds, spotlight_name) {
                 map,
             });
         }
+        
+        infowindow.addListener('visible', (event) => {
+            const saveBtn = document.querySelector('.save-btn');
+                saveBtn.addEventListener('click', () => {
+                    fetch(`/api/stations/${saveBtn.value}/save`, {
+                        method: 'PATCH'                                       
+
+                    })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    
+                   
+                    if(data.is_saved === true) {
+                        counter++                      
+                        console.log(counter)
+                    }
+                    
+                })
+
+                })
+            
+            
+        })
 
         marker.addListener("click", () => {
             infowindow.open({
@@ -381,7 +405,7 @@ async function lookupAddress(event) {
 let stationFilteredDetailList = []
 
 function findNearestStations(lat, lng) {
-    fetch(`http://localhost:4567/api/stations/nearest?lat=${lat}&long=${lng}&radius=3`)
+    fetch(`http://localhost:4567/api/stations/nearest?lat=${lat}&long=${lng}&radius=50`)
         .then(res => res.json())
         .then(stations => {
             let destinations = ''
