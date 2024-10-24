@@ -11,8 +11,13 @@ const temperatureDiv = document.getElementById('temperature')
 const suburb_Container = document.getElementById('postcodeSearch')
 const postcodeResults = document.getElementById('postcodeResults')
 const meterToggleBtn = document.querySelector('.meter-toggle-btn')
-var counter = 0 
+let counter = 0 
 
+fetch('/api/stations/favourites')
+.then(res => res.json())
+.then(result => {
+    starDiv.innerText = `${result.length} ⭐️`
+})
 
 
 function updateTime() {
@@ -178,6 +183,7 @@ async function initMap(latitude, longitude, spotlight_name = '') {
 
 let markerArr = []
 
+
 async function createMarkers(bounds, spotlight_name) {
     const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
 
@@ -250,19 +256,13 @@ async function createMarkers(bounds, spotlight_name) {
             ariaLabel: `${marker.title}`,
         });
 
-
-        
-
-        
-
-
         if (spotlight_name === station[i].name) {
             infowindow.open({
                 anchor: marker,
                 map,
             });
         }
-        
+
         infowindow.addListener('visible', (event) => {
             const saveBtn = document.querySelector('.save-btn');
                 saveBtn.addEventListener('click', () => {
@@ -272,13 +272,6 @@ async function createMarkers(bounds, spotlight_name) {
                     })
                 .then(res => res.json())
                 .then(data => {
-                    if(data[0].is_saved) {
-                        counter++                      
-                        console.log(counter)
-                        console.log(savedCounter);
-                        
-                        starDiv.innerText = counter
-                    }
                     
                 })
                 
@@ -469,7 +462,7 @@ function findNearestStations(lat, lng) {
             console.log(stationDetails)
 
             for (let station of stationDetails) {
-                console.log("1")
+                // console.log("1")
 
                 let stationImgSrc = ""
 

@@ -19,9 +19,14 @@ app.use(express.static('client'))
 app.use(requestLogger)
 
 app.get('/', (req, res) => {
-    Station.findAll()
-        .then(data => data)
+    // Station.findAll()
+    //     .then(data => data)
     res.render('index.ejs')
+})
+
+app.get('/api/stations/favourites', (req, res) => {
+    Station.findAll()
+        .then(data => res.json(data))
 })
 
 app.get('/api/stations/random', (req, res)=>{

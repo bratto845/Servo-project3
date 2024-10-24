@@ -6,7 +6,7 @@ const Station = {
         const sql = `
             SELECT * 
             FROM petrol_stations
-            LIMIT 400;
+            WHERE is_saved = 't';
         `
 
         return db.query(sql)
