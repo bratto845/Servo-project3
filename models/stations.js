@@ -70,7 +70,8 @@ const Station = {
 
         return db.query(sql, [lat1, lat2, long1, long2]) 
             .then(result => result.rows)
-    }
+    },
+    
             
 }
 
