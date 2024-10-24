@@ -89,6 +89,16 @@ app.get('/api/stations/nearest', (req, res) => {
         .then(data => res.json(data))
 })
 
+app.get('/api/stations/matrix', (req, res) => {
+    const lat = req.query.lat
+    const lng = req.query.lng
+    const destinations = req.query.destinations
+
+    fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${lat},${lng}&destinations=${destinations}&key=${ process.env.GOOGLE_MAPS_API }`)
+        .then(response => response.json())
+        .then(data => res.json(data))
+})
+
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 })

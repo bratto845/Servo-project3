@@ -8,8 +8,7 @@ const clockDiv = document.getElementById('clock')
 const temperatureDiv = document.getElementById('temperature')
 const suburb_Container = document.getElementById('postcodeSearch')
 const postcodeResults = document.getElementById('postcodeResults')
-
-
+const meterToggleBtn = document.querySelector('.meter-toggle-btn')
 
 function updateTime() {
     const date = new Date()
@@ -36,41 +35,41 @@ setInterval(updateTime, 1000)
 
 
 
-fetch('/api/stations')
-    .then(result => result.json())
-    .then(stations => {
-        for (let i = 0; i < 10; i++) {
-            servoListElem.appendChild(createStation(stations[i]))
-        }
-    })
+// fetch('/api/stations')
+//     .then(result => result.json())
+//     .then(stations => {
+//         for (let i = 0; i < 10; i++) {
+//             servoListElem.appendChild(createStation(stations[i]))
+//         }
+//     })
 
-const createStation = station => {
-    let elem = document.createElement('div')
-    elem.className = 'servo-item'
+// const createStation = station => {
+//     let elem = document.createElement('div')
+//     elem.className = 'servo-item'
 
-    let img = document.createElement('img')
+//     let img = document.createElement('img')
 
-    let content = document.createElement('div')
+//     let content = document.createElement('div')
 
-    let name = document.createElement('h4')
-    name.textContent = `${station.name}`
+//     let name = document.createElement('h4')
+//     name.textContent = `${station.name}`
 
-    let address = document.createElement('h4')
-    address.textContent = `${station.address}`
+//     let address = document.createElement('h4')
+//     address.textContent = `${station.address}`
 
-    let distance = document.createElement('span')
-    distance.textContent = '0m'
+//     let distance = document.createElement('span')
+//     distance.textContent = '0m'
 
-    elem.appendChild(img)
+//     elem.appendChild(img)
 
-    content.appendChild(name)
-    content.appendChild(address)
+//     content.appendChild(name)
+//     content.appendChild(address)
 
-    elem.appendChild(content)
-    elem.appendChild(distance)
+//     elem.appendChild(content)
+//     elem.appendChild(distance)
 
-    return elem
-}
+//     return elem
+// }
 
 
 function toggleClock() {
@@ -142,6 +141,14 @@ async function initMap(latitude, longitude, spotlight_name = '') {
     google.maps.event.addListenerOnce(map, 'idle', () => {
         let bounds = map.getBounds()
         createMarkers(bounds, spotlight_name)
+
+        const newCenter = map.getCenter();
+        let [lat, lng] = newCenter.toString().slice(1, -1).split(',')
+
+        centerLatitude_label.textContent = lat
+        centerLongitude_label.textContent = lng
+
+        findNearestStations(lat, lng)
     })
 
     google.maps.event.addListener(map, 'zoom_changed', () => {
@@ -159,6 +166,8 @@ async function initMap(latitude, longitude, spotlight_name = '') {
 
         let bounds = map.getBounds()
         createMarkers(bounds, spotlight_name)
+
+        findNearestStations(lat, lng)
     });
 }
 
@@ -326,7 +335,6 @@ async function showSpotlight() {
     await fetch('/api/stations/random')
         .then(res => res.json())
         .then(data => {
-            console.log(data);
 
             let spotlight_div = document.createElement('div')
             let spotlightTitle = document.createElement('a')
@@ -370,6 +378,162 @@ async function lookupAddress(event) {
 
 }
 
+let stationFilteredDetailList = []
+
+function findNearestStations(lat, lng) {
+    fetch(`http://localhost:4567/api/stations/nearest?lat=${lat}&long=${lng}&radius=3`)
+        .then(res => res.json())
+        .then(stations => {
+            let destinations = ''
+
+            stationFilteredDetailList = []
+
+            for (let i = 0; i < 25 ; i++) {
+                if(!stations[i]) {
+                    break
+                }
+
+                destinations += `${stations[i].latitude},${stations[i].longitude}|`
+
+                stationFilteredDetailList.push([stations[i].name, stations[i].owner, stations[i].latitude, stations[i].longitude])
+            }
+            
+            console.log(stationFilteredDetailList)
+
+            return fetch(`/api/stations/matrix?lat=${lat}&lng=${lng}&destinations=${destinations.slice(0, destinations.length - 1)}`)
+        })
+        .then(res => res.json())
+        .then(data => {
+
+            let stationDetails = []
+
+            for (i = 0; i < stationFilteredDetailList.length; i++) {
+                let [stationName, stationOwner, stationLatitude, stationLongitude] = stationFilteredDetailList[i]
+
+                stationDetails.push(
+                    {
+                        name: stationName, 
+                        owner: stationOwner,
+                        latitude: stationLatitude,
+                        longitude: stationLongitude,
+                        address: data.destination_addresses[i],
+                        distance: data.rows[0].elements[i].distance.text
+                    }
+                ) 
+            }
+
+            stationDetails.sort((a,b) => {
+                const distanceA = parseFloat(a.distance);
+                const distanceB = parseFloat(b.distance);
+
+                return distanceA - distanceB;
+            })
+
+            console.log(stationDetails)
+
+            
+            servoListElem.innerHTML = ""
+            for (station of stationDetails) {
+
+                let stationImgSrc = ""
+
+                switch (station.owner) {
+                    case 'Caltex':
+                        stationImgSrc = './images/Caltex.png'
+                        break;
+                    case 'BP':
+                        stationImgSrc = './images/BP.png'
+                        break;
+                    case '7-Eleven Pty Ltd':
+                        stationImgSrc = './images/7-Eleven.svg'
+                        break;
+                    case 'Shell':
+                        stationImgSrc = './images/Shell.png'
+                        break;
+                    default:
+                        stationImgSrc = './images/Default.png'
+                        break;
+                }
+
+                let servoItem_Img = document.createElement('img')
+                servoItem_Img.src = `${stationImgSrc}`
+                servoItem_Img.className = 'servo-item-img'
+
+                let servoItemDetails_Div = document.createElement('div')
+                servoItemDetails_Div.className = "nearest-servo-details"
+
+                let contentString = `
+                                    <h4>${station.name}</h4>
+                                    <p>${station.address}</p>
+                                `
+    
+                let servoItem_Div = document.createElement('div')
+                servoItem_Div.className = "servo-item"
+                
+                servoItemDetails_Div.innerHTML = contentString
+                servoItem_Div.appendChild(servoItem_Img)
+                servoItem_Div.appendChild(servoItemDetails_Div)
+
+                let servoItem_Span = document.createElement('span')
+                servoItem_Span.className = 'servo-distance'
+                servoItem_Span.textContent = `${station.distance}`
+
+                servoItem_Div.appendChild(servoItem_Span)
+
+                servoListElem.appendChild(servoItem_Div)
+
+                servoItemDetails_Div.addEventListener('click', () => initMap(parseFloat(station.latitude), parseFloat(station.longitude), station.name))
+        
+            }
+        })
+    }
+
+meterToggleBtn.addEventListener('click', toggleDistance)
+
+function toggleDistance() {
+    const servoDistanceSpans = document.querySelectorAll('.servo-distance')
+
+    for (span of servoDistanceSpans) {
+        if (span.innerText.includes('km')) {
+            span.innerText = parseFloat(span.innerText) * 1000 + ' m'
+        } else {
+            span.innerText = parseFloat(span.innerText) / 1000 + ' km'
+        }
+    }
+}
+
+function tempDisplayNearestStations() {
+
+    for (station of stations) {
+
+        let contentString = `
+            <div class="servo-item">
+                <img src="" alt="">
+                <div>
+                    <h4>{station.name}</h4>
+                    <h4>{station.address}</h4>
+                </div>
+                <span class="servo-distance">{distance}</span>
+            </div>
+        `
+
+
+
+        
+        let servoItem_Div = document.createElement('div')
+        servoItem_Div.className = "servo-item"
+
+        servoItem_Div.innerHTML = contentString
+
+        servoListElem.appendChild(servoItem_Div)
+
+        // spotlightTitle.addEventListener('click', () => initMap(parseFloat(data.latitude), parseFloat(data.longitude), data.name))
+
+    }
+
+
+
+}
 
 
 document.addEventListener('keydown', function (event) {
